@@ -1,0 +1,46 @@
+schemaVersion: 2.2.0
+metadata:
+  name: test-bms
+  version: 1.0.0
+components:
+  - name: nodejs
+    container:
+      image: node:18
+      memoryLimit: 1Gi
+      sourceMapping: /ramdisk/app/test-bms
+commands:
+  - id: install-system-deps
+    exec:
+      component: nodejs
+      commandLine: apt-get update && apt-get install -y git findutils grep curl wget
+      workingDir: /ramdisk/app/test-bms
+      group:
+        kind: build
+  - id: install
+    exec:
+      component: nodejs
+      commandLine: npm install -g typescript
+      workingDir: /ramdisk/app/test-bms
+      group:
+        kind: build
+        isDefault: true
+  - id: build
+    exec:
+      component: nodejs
+      commandLine: tsc fibonacci.ts
+      workingDir: /ramdisk/app/test-bms
+      group:
+        kind: build
+  - id: type-check
+    exec:
+      component: nodejs
+      commandLine: tsc --noEmit fibonacci.ts
+      workingDir: /ramdisk/app/test-bms
+      group:
+        kind: test
+        isDefault: true
+events:
+  postStart:
+    - install-system-deps
+    - install
+
