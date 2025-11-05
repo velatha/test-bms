@@ -1,0 +1,18 @@
+# Core Chess library
+python-chess==1.999
+
+# Testing framework
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Code quality
+black==23.12.1
+flake8==7.0.0
+mypy==1.8.0
+
+# Optional: For GUI or visualization
+# pygame==2.5.2
+
+# Optional: For AI/Engine features
+# numpy==1.26.3
+# stockfish==3.28.0
