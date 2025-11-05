@@ -29,9 +29,12 @@ class TestChessGame:
     
     def test_legal_moves(self):
         """Test getting legal moves"""
-        game = ChessGame()
-        legal_moves = game.get_legal_moves()
-        assert len(legal_moves) == 20  # Starting position has 20 legal moves
+        try:
+            game = ChessGame()
+            legal_moves = game.get_legal_moves()
+            assert len(legal_moves) == 20  # Starting position has 20 legal moves
+        except Exception as e:
+            pytest.fail(f"Unexpected exception raised: {e}")
     
     def test_game_not_over_initially(self):
         """Test that game is not over at start"""

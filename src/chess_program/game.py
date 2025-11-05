@@ -36,7 +36,59 @@ class ChessGame:
             return False
     
     def get_legal_moves(self) -> list:
-        """Get all legal moves in current position"""
+        """
+        Get all legal moves in current position.
+        
+        This method retrieves all legal moves available for the current player
+        in the current board position. Legal moves are those that comply with
+        chess rules including:
+        - Piece movement rules (e.g., bishops move diagonally, knights in L-shape)
+        - Not leaving the king in check
+        - Not moving into check
+        - Castling restrictions (king and rook have not moved, no pieces between them,
+          king not in check, does not pass through or land on attacked squares)
+        - En passant capture rules (if applicable)
+        - Pawn promotion rules (if applicable)
+        
+        The method leverages the python-chess library built-in legal move generator
+        which efficiently computes all possible legal moves according to FIDE chess rules.
+        
+        Logic Flow:
+        1. Access the board legal_moves property, which is a generator object
+        2. Convert the generator to a list for easier manipulation and iteration
+        3. Return the list of Move objects
+        
+        Returns:
+            list: A list of chess.Move objects representing all legal moves.
+                  Each Move object contains:
+                  - from_square: The starting square of the piece (0-63)
+                  - to_square: The destination square (0-63)
+                  - promotion: The piece type for pawn promotion (if applicable)
+                  - drop: The piece type for dropping in variants (None for standard chess)
+                  
+                  The list will be empty if there are no legal moves (checkmate or stalemate).
+                  In a starting position, this will return 20 legal moves 
+                  (16 pawn moves: 8 one-square and 8 two-square, 4 knight moves: 2 per knight).
+        
+        Parameters:
+            None - operates on the current board state
+        
+        Example:
+            game = ChessGame()
+            moves = game.get_legal_moves()
+            print(len(moves))  # Starting position outputs: 20
+            # Iterate through legal moves
+            for move in moves:
+                print(move.uci())  # Print move in UCI notation
+        
+        Note:
+            - The returned Move objects can be used directly with make_move() method
+              by converting them to UCI notation using move.uci()
+            - The method does not modify the board state
+            - The legal moves are dynamically generated based on current position
+            - This is computationally efficient as it uses the underlying C library
+              optimizations from the python-chess package
+        """
         return list(self.board.legal_moves)
     
     def is_game_over(self) -> bool:
